@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Microsoft.Win32;
+using System.IO;
 using System.Printing;
 using System.Text;
 using System.Windows;
@@ -17,6 +18,7 @@ namespace Assessment_project___Austin___23370104
     {
         public string[] load_list = { };
         public string[] search_resualts = { };
+
 
         //used in switching between pages 
         void select_menu(string selected)
@@ -117,29 +119,30 @@ namespace Assessment_project___Austin___23370104
             }
         }
 
-            //part 3
+        //part 3
         private void save_file_Click(object sender, RoutedEventArgs e)
         {
             // saves all items in the products box to a file called "stored_list.txt"
-            using (StreamWriter writetext = new StreamWriter("stored_list.txt"))
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            if (saveFileDialog.ShowDialog() == true)
             {
-                for (int i = 0; i < (wait_list.Items.Count); i++) 
+                string save_string = "";
+                for (int i = 0; i < wait_list.Items.Count; i++)
                 {
-                    writetext.Write(wait_list.Items.GetItemAt(i));
+                    save_string = save_string + wait_list.Items.GetItemAt(i).ToString();
                 }
+                File.WriteAllText(saveFileDialog.FileName, save_string);
             }
         }
 
             //part 4
         public void load_file_Click(object sender, RoutedEventArgs e)
         {
-            //reads from the "stored_list.txt" and splits the items into entries 
-            using (StreamReader readtext = new StreamReader("stored_list.txt"))
-            {
-                load_list = readtext.ReadToEnd().Split(',');
-            }
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+                load_list = File.ReadAllText(openFileDialog.FileName).Split(',');
 
-            for (int i = 0;i < load_list.Length; i++)
+            for (int i = 0; i < load_list.Length; i++)
             {
                 if (load_list[i] != "")
                 {
@@ -149,11 +152,7 @@ namespace Assessment_project___Austin___23370104
                         wait_list.Items.Add(load_list[i]);
                     }
                 }
-                    
-                
-                
             }
-
         }
 
         //part B
@@ -185,7 +184,7 @@ namespace Assessment_project___Austin___23370104
 
         private void place_order_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void view_all_products_Click(object sender, RoutedEventArgs e)
