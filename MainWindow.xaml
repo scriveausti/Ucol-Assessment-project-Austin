@@ -14,6 +14,7 @@
         xmlns:local="clr-namespace:Assessment_project___Austin___23370104"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" ResizeMode="CanResize" MinHeight="450" MinWidth="800"
+        
         >
         
     <Grid>
@@ -31,8 +32,10 @@
         </Menu>
         
         <!--Sales Page-->
-        <Grid Name="sales_page" Background="#FF519C93" Grid.Row="1" Visibility="Hidden">
+        <Grid Name="sales_page" Background="#FF519C93" Grid.Row="1" Visibility="Visible">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="20"/>
@@ -60,19 +63,21 @@
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Name="product_id" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">Product Id:</TextBlock>
+            <TextBlock Name="product_id" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">Product Id:</TextBlock>
             <TextBox Name="input_product_id" Grid.Row="1" Grid.Column="3" Height="25" Text=""/>
 
-            <TextBlock Name="product_name" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center">Product Name:</TextBlock>
+            <TextBlock Name="product_name" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">Product Name:</TextBlock>
             <TextBox Name="input_product_name" Grid.Row="3" Grid.Column="3" Height="25" Text=""/>
 
-            <TextBlock Name="product_quantity" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center">Quantity:</TextBlock>
+            <TextBlock Name="product_quantity" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">Quantity:</TextBlock>
             <TextBox Name="input_product_quantity" Grid.Row="5" Grid.Column="3" Height="25" Text=""/>
 
-            <TextBlock Name="product_price" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center">Price:</TextBlock>
+            <TextBlock Name="product_price" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">Price:</TextBlock>
             <TextBox Name="input_product_price" Grid.Row="7" Grid.Column="3" Height="25" Text=""/>
 
-            <ListBox Name="wait_list" Grid.Row="1" Grid.Column="5" Grid.RowSpan="7" Grid.ColumnSpan="5" SelectionMode="Single"></ListBox>
+            <ListBox Name="wait_list" Grid.Row="1" Grid.Column="5" Grid.RowSpan="7" Grid.ColumnSpan="5" SelectionMode="Multiple"></ListBox>
+
+            <ListBox Name="sales_list_select" Grid.Row="1" Grid.Column="11" Grid.RowSpan="3" SelectionMode="Single" IsSynchronizedWithCurrentItem="True" SelectionChanged="sales_list_select_SelectionChanged"></ListBox>
             
             <Button Name="add_wait_list" Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="9" Click="add_wait_list_Click">Add to Waiting List</Button>
             <Button Name="clear_list" Grid.Column="5" Grid.Row="9" Click="clear_list_Click">clear List</Button>
@@ -82,7 +87,7 @@
         </Grid>
         
         <!--Customer Page-->
-        <Grid Name="customer_page" Background="PaleVioletRed" Grid.Row="1" Visibility="Visible">
+        <Grid Name="customer_page" Background="PaleVioletRed" Grid.Row="1" Visibility="Hidden">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="*"/>
