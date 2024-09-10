@@ -186,7 +186,7 @@ namespace Assessment_project___Austin___23370104
             }
         }
 
-        //part 2
+        //part 2   - error in removeing selected 
         private void clear_list_Click(object sender, RoutedEventArgs e)
         //checks if the user has selected a item
         //if they haven't it will clear the whole list
@@ -197,13 +197,17 @@ namespace Assessment_project___Austin___23370104
                 if (wait_list.SelectedItem == null)
                 {
                     loaded_lists[sales_list_select.SelectedItem.ToString()].Clear();
+                    update_wait_list(sales_list_select.SelectedItem.ToString());
                 }
                 else
                 {
-                    foreach (var item in wait_list.SelectedItems)
+                    
+                    foreach (string item in wait_list.SelectedItems) 
                     {
                         loaded_lists[sales_list_select.SelectedItem.ToString()].RemoveAt(wait_list.Items.IndexOf(item));
+                        
                     }
+
                 }
                 update_wait_list(sales_list_select.SelectedItem.ToString());
             }
