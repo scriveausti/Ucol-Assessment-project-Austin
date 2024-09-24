@@ -96,17 +96,19 @@ namespace Assessment_project___Austin___23370104
             wait_list.Items.Clear();
             foreach(Dictionary<string,dynamic> product in loaded_lists[list_name])
             {
-                wait_list.Items.Add(" ID: " + product["id"] + Environment.NewLine + "Name: " + product["name"] + Environment.NewLine + "Price: " + product["price"] + Environment.NewLine +  "Quantity: " + product["quantity"]);
+                wait_list.Items.Add(" ID: " + product["id"] + Environment.NewLine + "Name: " + product["name"] + Environment.NewLine + "Price: $" + product["price"].ToString("N2") + Environment.NewLine +  "Quantity: " + product["quantity"]);
             }
         }
 
 
 
-        public void update_sales_list_selecter() 
+        public void update_list_selecter() 
         {
+            customer_list_select.Items.Clear();
             sales_list_select.Items.Clear();
             foreach(string key in loaded_lists.Keys)
             {
+                customer_list_select.Items.Add(key);
                 sales_list_select.Items.Add(key);
                
             }
@@ -118,6 +120,7 @@ namespace Assessment_project___Austin___23370104
             if (sales_list_select.SelectedItem != null)
             {
                 update_wait_list(sales_list_select.SelectedItem.ToString());
+                customer_list_select.SelectedItem = sales_list_select.SelectedItem;
             }
             else
             {
@@ -196,7 +199,7 @@ namespace Assessment_project___Austin___23370104
                 product_list.Add(new_product);
                 loaded_lists[selcted_item] = product_list;
                 update_wait_list(selcted_item);
-                update_sales_list_selecter();
+                update_list_selecter();
                 sales_list_select.SelectedItem = selcted_item;
 
                 input_product_id.Text = "";
@@ -221,14 +224,12 @@ namespace Assessment_project___Austin___23370104
                 }
                 else
                 {
-                    
                     foreach (string item in wait_list.SelectedItems) 
                     {
                         Trace.WriteLine(item);
                         Trace.WriteLine(wait_list.Items.IndexOf(item));
                         loaded_lists[sales_list_select.SelectedItem.ToString()].RemoveAt(wait_list.Items.IndexOf(item));
                     }
-
                 }
                 update_wait_list(sales_list_select.SelectedItem.ToString());
             }
@@ -364,7 +365,7 @@ namespace Assessment_project___Austin___23370104
                             loaded_lists.Add(list_name, formated_list);
                             sales_list_select.SelectedItem = list_name;
                             update_wait_list(list_name);
-                            update_sales_list_selecter();
+                            update_list_selecter();
                         }
                     }
                     else
@@ -372,7 +373,7 @@ namespace Assessment_project___Austin___23370104
                         loaded_lists.Add(list_name, formated_list);
                         sales_list_select.SelectedItem = list_name;
                         update_wait_list(list_name);
-                        update_sales_list_selecter();
+                        update_list_selecter();
                     }
                 }
                 else
@@ -387,28 +388,29 @@ namespace Assessment_project___Austin___23370104
         //part 1
         private void search_button_Click(object sender, RoutedEventArgs e)
         {
-            /*
-            bool Item_found = false;
-            product_view.Items.Clear();
-            string search_item = input_search_product.Text;
-            using (StreamReader readtext = new StreamReader("stored_list.txt"))
+            if (customer_list_select.SelectedItem != null)
             {
-                load_list = readtext.ReadToEnd().Split(',');
-                for (int i = 0; i < load_list.Length; i++) load_list[i] = load_list[i] + ",";
-            }
-            for (int i = 0; i < load_list.Length; i++)
-            {
-                if (load_list[i].Contains(search_item))
+                bool Item_found = false;
+                product_view.Items.Clear();
+                string search_item = input_search_product.Text;
+                
+                foreach(Dictionary<string, dynamic> product in loaded_lists[customer_list_select.SelectedItem.ToString()])
+                    if (product["name"].Contains(search_item))
+                    {
+                        product_view.Items.Add(" ID: " + product["id"] + Environment.NewLine + "Name: " + product["name"] + Environment.NewLine + "Price: $" + product["price"].ToString("N2") + Environment.NewLine + "Quantity: " + product["quantity"]);
+                        Item_found = true;
+                    }
+                
+                if (!Item_found)
                 {
-                    product_view.Items.Add(load_list[i]);
-                    Item_found = true;
+                    MessageBox.Show("Unable to find item", "Not Found", MessageBoxButton.OK);
                 }
             }
-            if (!Item_found)
+            else
             {
-                MessageBox.Show("Unable to find item", "Not Found", MessageBoxButton.OK);
+                MessageBox.Show("please Select a list in the box on the top right", "No list", MessageBoxButton.OK);
             }
-            */
+            
         }
 
         private void place_order_Click(object sender, RoutedEventArgs e)
@@ -418,7 +420,11 @@ namespace Assessment_project___Austin___23370104
 
         private void view_all_products_Click(object sender, RoutedEventArgs e)
         {
-
+            product_view.Items.Clear();
+            foreach (Dictionary<string, dynamic> product in loaded_lists[customer_list_select.SelectedItem.ToString()])
+            {
+                product_view.Items.Add(" ID: " + product["id"] + Environment.NewLine + "Name: " + product["name"] + Environment.NewLine + "Price: $" + product["price"].ToString("N2") + Environment.NewLine + "Quantity: " + product["quantity"]);
+            }
         }
 
         private void add_to_cart_Click(object sender, RoutedEventArgs e)
@@ -429,6 +435,14 @@ namespace Assessment_project___Austin___23370104
             }
         }
 
+        private void remove_from_cart_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
+
+        private void clear_cart_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

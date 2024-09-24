@@ -14,7 +14,7 @@
         xmlns:local="clr-namespace:Assessment_project___Austin___23370104"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" ResizeMode="CanResize" MinHeight="450" MinWidth="800"
-        
+        FontSize="15"
         >
         
     <Grid>
@@ -32,7 +32,7 @@
         </Menu>
         
         <!--Sales Page-->
-        <Grid Name="sales_page" Background="#FF519C93" Grid.Row="1" Visibility="Visible">
+        <Grid Name="sales_page" Background="#FF519C93" Grid.Row="1" Visibility="Hidden">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="*"/>
@@ -87,7 +87,7 @@
         </Grid>
         
         <!--Customer Page-->
-        <Grid Name="customer_page" Background="PaleVioletRed" Grid.Row="1" Visibility="Hidden">
+        <Grid Name="customer_page" Background="PaleVioletRed" Grid.Row="1" Visibility="Visible">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="*"/>
@@ -103,6 +103,8 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="20"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="*"/>
@@ -117,12 +119,35 @@
             <TextBox Name="input_search_product" Grid.Row="1" Grid.Column="3" Height="25" Text=""/>
             <Button Name="search_button" Grid.Row="1" Grid.Column="5" MaxHeight="25" Click="search_button_Click" >Search</Button>
 
-            <ListBox Name="product_view" Grid.Row="3" Grid.RowSpan="3" Grid.Column="1" Grid.ColumnSpan="5" />
-            <Button Name="place_order" Grid.Row="5" Grid.Column="7" Click="place_order_Click" >Place Order and Checkout</Button>
-
-            <Button Name="view_all_products" Grid.Row="7" Grid.Column="1" Click="view_all_products_Click" >View All Products</Button>
-            <Button Name="add_to_cart" Grid.Row="7" Grid.Column="3" Click="add_to_cart_Click" >Add to Cart</Button>
- 
+            <ListBox Name="product_view" Grid.Row="3" Grid.RowSpan="5" Grid.Column="1" Grid.ColumnSpan="5" />
+            
+            
+            <ListBox Name="cart_list_box" Grid.Row="3" Grid.Column="7" Grid.RowSpan="5" SelectionMode="Single"></ListBox>
+            
+            <ListBox Name="customer_list_select" Grid.Row="1" Grid.Column="9" Grid.RowSpan="3" SelectionMode="Single" IsSynchronizedWithCurrentItem="True" SelectionChanged="sales_list_select_SelectionChanged"></ListBox>
+            <Grid Name="Customer_buttons" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="9">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Name="place_order"          Grid.Row="2" Grid.Column="6" Grid.ColumnSpan="3" Click="place_order_Click" >Place Order and Checkout</Button>
+                <Button Name="view_all_products"    Grid.Row="0" Grid.Column="0" Click="view_all_products_Click" >View All Products</Button>
+                <Button Name="add_to_cart"          Grid.Row="0" Grid.Column="2" Click="add_to_cart_Click" >Add to Cart</Button>
+                <Button Name="remove_from_cart"     Grid.Row="0" Grid.Column="6" Click="remove_from_cart_Click">Remove From Cart</Button>
+                <Button Name="clear_cart"           Grid.Row="0" Grid.Column="8" Click="clear_cart_Click">Clear Cart</Button>
+            </Grid>
         </Grid>
         
         <!--Checkout Page-->
