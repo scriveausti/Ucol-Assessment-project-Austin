@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -14,6 +15,10 @@ namespace Assessment_project___Austin___23370104
         public string[] search_resualts = { };
 
         public Dictionary<string,List<Dictionary<string, dynamic>>> loaded_lists = new Dictionary<string, List<Dictionary<string, dynamic>>>();
+
+        public List<Dictionary<string, dynamic>> search_resualts_list = new List<Dictionary<string, dynamic>>();
+
+        public List<Dictionary<string, dynamic>> cart = new List<Dictionary<string, dynamic>>();
 
         //used in switching between pages 
         /// <summary>
@@ -100,6 +105,23 @@ namespace Assessment_project___Austin___23370104
             }
         }
 
+        public void update_product_veiw(List<Dictionary<string,dynamic>> list)
+        {
+            product_view.Items.Clear();
+            foreach (Dictionary<string, dynamic> product in list)
+            {
+                product_view.Items.Add(" ID: " + product["id"] + Environment.NewLine + "Name: " + product["name"] + Environment.NewLine + "Price: $" + product["price"].ToString("N2") + Environment.NewLine + "Quantity: " + product["quantity"]);
+            }
+         }
+
+        public void update_cart_list_box()
+        {
+            cart_list_box.Items.Clear();
+            foreach (Dictionary<string, dynamic> product in cart)
+            {
+                cart_list_box.Items.Add(" ID: " + product["id"] + Environment.NewLine + "Name: " + product["name"] + Environment.NewLine + "Price: $" + product["price"].ToString("N2") + Environment.NewLine + "Quantity: " + product["quantity"]);
+            }
+        }
 
 
         public void update_list_selecter() 
@@ -393,17 +415,23 @@ namespace Assessment_project___Austin___23370104
                 bool Item_found = false;
                 product_view.Items.Clear();
                 string search_item = input_search_product.Text;
-                
+                search_resualts_list.Clear();
+
                 foreach(Dictionary<string, dynamic> product in loaded_lists[customer_list_select.SelectedItem.ToString()])
+                    
                     if (product["name"].Contains(search_item))
                     {
-                        product_view.Items.Add(" ID: " + product["id"] + Environment.NewLine + "Name: " + product["name"] + Environment.NewLine + "Price: $" + product["price"].ToString("N2") + Environment.NewLine + "Quantity: " + product["quantity"]);
+                        search_resualts_list.Add(product);
                         Item_found = true;
                     }
                 
                 if (!Item_found)
                 {
                     MessageBox.Show("Unable to find item", "Not Found", MessageBoxButton.OK);
+                }
+                else
+                {
+                    update_product_veiw(search_resualts_list);
                 }
             }
             else
@@ -420,18 +448,58 @@ namespace Assessment_project___Austin___23370104
 
         private void view_all_products_Click(object sender, RoutedEventArgs e)
         {
-            product_view.Items.Clear();
-            foreach (Dictionary<string, dynamic> product in loaded_lists[customer_list_select.SelectedItem.ToString()])
+            if (customer_list_select.SelectedItem != null)
             {
-                product_view.Items.Add(" ID: " + product["id"] + Environment.NewLine + "Name: " + product["name"] + Environment.NewLine + "Price: $" + product["price"].ToString("N2") + Environment.NewLine + "Quantity: " + product["quantity"]);
+                update_product_veiw(loaded_lists[customer_list_select.SelectedItem.ToString()]);
             }
         }
 
         private void add_to_cart_Click(object sender, RoutedEventArgs e)
         {
-            if (wait_list.SelectedItem != null)
+            if (customer_list_select.SelectedItem != null)
             {
+                if (product_view.SelectedItem != null)
+                {
+                    List<Dictionary<string,dynamic>> target_list = new List<Dictionary<string,dynamic>>();
+                    if(search_resualts_list.Count() != 0)
+                    {
+                        target_list = search_resualts_list;
+                    }
+                    else
+                    {
+                        target_list = loaded_lists[customer_list_select.SelectedItem.ToString()];
+                    }
 
+                    Dictionary<string,dynamic> product = target_list[product_view.SelectedIndex];
+                
+                    bool item_not_found = true;
+                    foreach(Dictionary<string,dynamic> cart_item in cart)
+                    {
+                        if (cart_item["id"] == product["id"])
+                        {
+                            item_not_found = false;
+                            if (cart_item["quantity"] != product["quantity"]) //not working
+                            {
+                                cart_item["quantity"] += 1;
+                                break;
+                            }
+                            else
+                            {
+                                MessageBox.Show("Limit reached", "Limit reached", MessageBoxButton.OK);
+                                break;
+                            }
+
+                        }
+                    }
+                    if (item_not_found)
+                    {
+                        Dictionary<string, dynamic> product_info = product;
+                        product_info["quantity"] = 5;
+                        cart.Add(product_info);
+                    }
+                    Console.Beep(2000, 100);
+                    update_cart_list_box();
+                }
             }
         }
 

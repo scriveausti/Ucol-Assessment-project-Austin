@@ -119,10 +119,10 @@
             <TextBox Name="input_search_product" Grid.Row="1" Grid.Column="3" Height="25" Text=""/>
             <Button Name="search_button" Grid.Row="1" Grid.Column="5" MaxHeight="25" Click="search_button_Click" >Search</Button>
 
-            <ListBox Name="product_view" Grid.Row="3" Grid.RowSpan="5" Grid.Column="1" Grid.ColumnSpan="5" />
+            <ListBox Name="product_view" Grid.Row="3" Grid.RowSpan="5" Grid.Column="1" Grid.ColumnSpan="3" SelectionMode="Single" />
             
             
-            <ListBox Name="cart_list_box" Grid.Row="3" Grid.Column="7" Grid.RowSpan="5" SelectionMode="Single"></ListBox>
+            <ListBox Name="cart_list_box" Grid.Row="3" Grid.Column="5" Grid.RowSpan="5" Grid.ColumnSpan="3" SelectionMode="Single"></ListBox>
             
             <ListBox Name="customer_list_select" Grid.Row="1" Grid.Column="9" Grid.RowSpan="3" SelectionMode="Single" IsSynchronizedWithCurrentItem="True" SelectionChanged="sales_list_select_SelectionChanged"></ListBox>
             <Grid Name="Customer_buttons" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="9">
