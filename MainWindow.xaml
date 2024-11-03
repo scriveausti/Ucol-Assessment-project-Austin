@@ -151,8 +151,49 @@
         </Grid>
 
         <!--Checkout Page-->
-        <Grid Name="checkout_page" Grid.Row="1" Background="LightGoldenrodYellow" Visibility="Visible">
+        <Grid Name="checkout_page" Grid.Row="1" Background="OrangeRed" Visibility="Visible">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
             
+            <TextBlock Name="checkout_name_title"           Grid.Row="1" Grid.Column="1">Name:</TextBlock>
+            <TextBlock Name="checkout_contact_number_title" Grid.Row="3" Grid.Column="1">Contact Number:</TextBlock>
+            <TextBlock Name="checkout_email_title"          Grid.Row="5" Grid.Column="1">Email:</TextBlock>
+            <TextBlock Name="checkout_address_title"        Grid.Row="7" Grid.Column="1">Address:</TextBlock>
+
+            <TextBox Name="checkout_name_box"               Grid.Row="1" Grid.Column="3" VerticalAlignment="Top"></TextBox>
+            <TextBox Name="checkout_contact_number_box"     Grid.Row="3" Grid.Column="3" VerticalAlignment="Top"></TextBox>
+            <TextBox Name="checkout_email_box"              Grid.Row="5" Grid.Column="3" VerticalAlignment="Top"></TextBox>
+            <TextBox Name="checkout_address_box"            Grid.Row="7" Grid.Column="3" VerticalAlignment="Top"></TextBox>
+
+            <Button Name="btn_checkout"     Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3" Click="btn_checkout_Click">Checkout</Button>
+            <Button Name="btn_edit_cart"     Grid.Row="9" Grid.Column="5" Grid.ColumnSpan="1" Click="btn_edit_cart_Click">Edit Cart</Button>
+
+            <ListBox Name="checkout_cart"   Grid.Row="1" Grid.Column="5" Grid.ColumnSpan="3" Grid.RowSpan="5" SelectionMode="Single"></ListBox>
+
+            <TextBlock Name="Total_price_title"  Grid.Row="7" Grid.Column="5" HorizontalAlignment="Right">Total price:</TextBlock>
+            <TextBlock Name="Total_price"  Grid.Row="7" Grid.Column="7" HorizontalAlignment="left"></TextBlock>
         </Grid>
     </Grid>
 </Window>
