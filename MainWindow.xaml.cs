@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http.Headers;
 using System.Windows;
 using System.Windows.Media;
 
@@ -140,153 +141,125 @@ namespace Assessment_project___Austin___23370104
             }
         }
 
-        public void load_file()
+        public void update_all()
+        {
+            update_wait_list("product_list");
+            update_cart();
+            update_list_selecter();
+        }
+
+        public void load_file(string fileName)
         {
             string[] load_list = { };
             string[] load_product_array = { };
 
-
-            bool file_error = false;
-
             List<Dictionary<string, dynamic>> formated_list = new List<Dictionary<string, dynamic>>();
 
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "txt files (*.txt)|*.txt";
-            if (openFileDialog.ShowDialog() == true)
+            StreamReader loadedFile = new StreamReader(fileName);
+            load_list = loadedFile.ReadToEnd().Split(Environment.NewLine);
+            if (load_list[0] =="")
             {
+                MessageBox.Show("File is empty", "File Empty", MessageBoxButton.OK);
+                return;
+            }
+            
 
-                load_list = File.ReadAllText(openFileDialog.FileName).Split(Environment.NewLine);
+            for (int i = 0; i < load_list.Length; i++)
+            {
+                load_product_array = load_list[i].Split(",");
 
-                for (int i = 0; i < load_list.Length; i++)
+
+                bool right_data_types = true;
+                bool id_alread_used = false;
+                Dictionary<string, dynamic> loading_product = new Dictionary<string, dynamic>();
+
+
+                foreach (Dictionary<string, dynamic> product in formated_list)
                 {
-                    if (file_error == false)
+                    if (product["id"] == load_product_array[0])
                     {
-                        load_product_array = load_list[i].Split(",");
-                        if (load_product_array.Length == 4)
-                        {
-
-                            bool right_data_types = true;
-                            bool id_alread_used = false;
-                            Dictionary<string, dynamic> loading_product = new Dictionary<string, dynamic>();
-
-
-                            foreach (Dictionary<string, dynamic> product in formated_list)
-                            {
-                                if (product["id"] == load_product_array[0])
-                                {
-                                    MessageBox.Show("Error, Product ID already in list", "Error", MessageBoxButton.OK);
-                                    right_data_types = false;
-                                    id_alread_used = true;
-                                }
-                            }
-                            if (!id_alread_used)
-                                loading_product.Add("id", load_product_array[0]);
-
-
-
-
-                            loading_product.Add("name", load_product_array[1]);
-
-                            try { loading_product.Add("price", Convert.ToDouble(load_product_array[2])); }
-                            catch (Exception)
-                            {
-                                MessageBox.Show("Error,  data from file for a price is not the right data type", "Error", MessageBoxButton.OK);
-                                right_data_types = false;
-                            }
-
-                            try { loading_product.Add("quantity", Convert.ToInt32(load_product_array[3])); }
-                            catch (Exception)
-                            {
-                                MessageBox.Show("Error, data from file for a quantity is not the right data type", "Error", MessageBoxButton.OK);
-                                right_data_types = false;
-                            }
-
-                            if (right_data_types)
-                            {
-                                formated_list.Add(loading_product);
-
-                            }
-                            else
-                            {
-                                file_error = true;
-                            }
-
-                        }
-                        else
-                        {
-                            file_error = true;
-                        }
-                    }
-
-                }
-                if (!file_error)
-                {
-                    string list_name = openFileDialog.FileName;
-
-                    if (LoadedLists.ContainsKey(list_name))
-                    {
-                        if (MessageBox.Show("File selected alread loaded. Do you want to override it?", "Override", MessageBoxButton.YesNo) == MessageBoxResult.Yes) ;
-                        {
-                            LoadedLists.Remove(list_name);
-                            LoadedLists.Add(list_name, formated_list);
-                            sales_list_select.SelectedItem = list_name;
-                            update_wait_list(list_name);
-                            update_list_selecter();
-                        }
-                    }
-                    else
-                    {
-                        LoadedLists.Add(list_name, formated_list);
-                        sales_list_select.SelectedItem = list_name;
-                        update_wait_list(list_name);
-                        update_list_selecter();
+                        MessageBox.Show("Error, Product ID already in list", "Error", MessageBoxButton.OK);
+                        right_data_types = false;
+                        id_alread_used = true;
                     }
                 }
-                else
+                if (!id_alread_used)
+                    loading_product.Add("id", load_product_array[0]);
+
+                loading_product.Add("name", load_product_array[1]);
+
+                try { loading_product.Add("price", Convert.ToDouble(load_product_array[2])); }
+                catch (Exception)
                 {
-                    MessageBox.Show("Error, bad file, please retry with a difrent file", "Error", MessageBoxButton.OK);
+                    MessageBox.Show("Error,  data from file for a price is not the right data type", "Error", MessageBoxButton.OK);
+                    right_data_types = false;
+                }
+
+                try { loading_product.Add("quantity", Convert.ToInt32(load_product_array[3])); }
+                catch (Exception)
+                {
+                    MessageBox.Show("Error, data from file for a quantity is not the right data type", "Error", MessageBoxButton.OK);
+                    right_data_types = false;
+                }
+
+                if (right_data_types)
+                {
+                    formated_list.Add(loading_product);
+
                 }
             }
+            
+            Trace.Write(formated_list.ToString());
+            LoadedLists["product_list"] = formated_list;
+            clear_cart();
+            update_all();
+            loadedFile.Close();
         }
 
-        public void save_file()
+        public void save_file(string fileName)
         {
             if (sales_list_select.SelectedItem == null)
             {
                 return;
             }
             // saves all items in the products box to a file called "stored_list.txt"
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "txt files (*.txt)|*.txt";
-            if (saveFileDialog.ShowDialog() == true)
+            
+            string save_string = "";
+            int iteration_product = 0;
+            foreach (Dictionary<string, dynamic> product in LoadedLists[sales_list_select.SelectedItem.ToString()])
             {
-                string save_string = "";
-                int iteration_product = 0;
-                foreach (Dictionary<string, dynamic> product in LoadedLists[sales_list_select.SelectedItem.ToString()])
+                int iteration_attributes = 0;
+                foreach (string key in product.Keys)
                 {
-                    int iteration_attributes = 0;
-                    foreach (string key in product.Keys)
+                    if (iteration_attributes < 3)
                     {
-                        if (iteration_attributes < 3)
-                        {
-                            save_string = save_string + product[key] + ",";
-                        }
-                        else
-                        {
-                            save_string = save_string + product[key];
-                        }
-                        iteration_attributes++;
+                        save_string = save_string + product[key] + ",";
                     }
-
-                    if (iteration_product < (LoadedLists[sales_list_select.SelectedItem.ToString()].Count - 1))
-                        save_string = save_string + Environment.NewLine;
-                    iteration_product++;
-
+                    else
+                    {
+                        save_string = save_string + product[key];
+                    }
+                    iteration_attributes++;
                 }
 
-                File.WriteAllText(saveFileDialog.FileName, save_string);
+                if (iteration_product < (LoadedLists[sales_list_select.SelectedItem.ToString()].Count - 1))
+                    save_string = save_string + Environment.NewLine;
+                iteration_product++;
+
             }
+
+            StreamWriter loadedFile = new StreamWriter(fileName);
+            loadedFile.Write( save_string);
+            loadedFile.Close();
         }
+
+        public void clear_cart()
+        {
+            cart.Clear();
+            update_cart();
+        }
+
+
 
         private void sales_list_select_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
@@ -300,6 +273,8 @@ namespace Assessment_project___Austin___23370104
                 wait_list.Items.Clear();
             }
         }
+
+
 
 
         //part A
@@ -332,9 +307,9 @@ namespace Assessment_project___Austin___23370104
             }
             else
             {
-                sales_list_select.SelectedItem = "new_products";
+                sales_list_select.SelectedItem = "product_list";
                 Trace.WriteLine(sales_list_select.SelectedItem);
-                selcted_item = "new_products";
+                selcted_item = "product_list";
             }
 
 
@@ -417,13 +392,13 @@ namespace Assessment_project___Austin___23370104
         //part 3
         private void save_file_Click(object sender, RoutedEventArgs e)
         {
-            save_file();
+            save_file("ProductFile.txt");
         }
 
         //part 4
         public void load_file_Click(object sender, RoutedEventArgs e)
         {
-            load_file();
+            load_file("ProductFile.txt");
         }
 
 
@@ -473,7 +448,7 @@ namespace Assessment_project___Austin___23370104
         {
             if (customer_list_select.Items.Count == 0)
             {
-                load_file();
+                load_file("ProductFile.txt");
             }
             if (customer_list_select.SelectedItem == null)
             {
@@ -579,8 +554,7 @@ namespace Assessment_project___Austin___23370104
 
         private void clear_cart_Click(object sender, RoutedEventArgs e)
         {
-            cart.Clear();
-            update_cart();
+            clear_cart();
         }
 
 
@@ -588,18 +562,22 @@ namespace Assessment_project___Austin___23370104
         //part 1
         private void btn_checkout_Click(object sender, RoutedEventArgs e)
         {
-            bool epmty_box = false;
-            if (checkout_name_box.Text == "") epmty_box = true;
-            if (checkout_contact_number_box.Text == "") epmty_box = true;
-            if (checkout_email_box.Text == "") epmty_box = true;
-            if (checkout_address_box.Text == "") epmty_box = true;
-            if (epmty_box)
+            bool empty_box = false;
+            if (checkout_name_box.Text == "") empty_box = true;
+            if (checkout_contact_number_box.Text == "") empty_box = true;
+            if (checkout_email_box.Text == "") empty_box = true;
+            if (checkout_address_box.Text == "") empty_box = true;
+            if (empty_box)
             {
                 MessageBox.Show("Error, Text box empty", "Error", MessageBoxButton.OK);
                 return;
             }
+            MessageBox.Show("Thank You", "Thank You", MessageBoxButton.OK);
+            
+            foreach ( Dictionary<string,dynamic> product in cart)
+            {
 
-
+            }
 
         }
 
