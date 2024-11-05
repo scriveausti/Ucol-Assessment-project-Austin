@@ -139,6 +139,7 @@ namespace Assessment_project___Austin___23370104
                 sales_list_select.Items.Add(key);
 
             }
+
         }
 
         public void update_all()
@@ -163,6 +164,8 @@ namespace Assessment_project___Austin___23370104
                 return;
             }
             
+
+
 
             for (int i = 0; i < load_list.Length; i++)
             {
@@ -213,10 +216,11 @@ namespace Assessment_project___Austin___23370104
             LoadedLists["product_list"] = formated_list;
             clear_cart();
             update_all();
+            sales_list_select.SelectedItem = "product_list";
             loadedFile.Close();
         }
 
-        public void save_file(string fileName)
+        public void save_file(string fileName, string listName)
         {
             if (sales_list_select.SelectedItem == null)
             {
@@ -226,7 +230,7 @@ namespace Assessment_project___Austin___23370104
             
             string save_string = "";
             int iteration_product = 0;
-            foreach (Dictionary<string, dynamic> product in LoadedLists[sales_list_select.SelectedItem.ToString()])
+            foreach (Dictionary<string, dynamic> product in LoadedLists[listName])
             {
                 int iteration_attributes = 0;
                 foreach (string key in product.Keys)
@@ -242,7 +246,7 @@ namespace Assessment_project___Austin___23370104
                     iteration_attributes++;
                 }
 
-                if (iteration_product < (LoadedLists[sales_list_select.SelectedItem.ToString()].Count - 1))
+                if (iteration_product < (LoadedLists[ "product_list"].Count - 1))
                     save_string = save_string + Environment.NewLine;
                 iteration_product++;
 
@@ -265,7 +269,8 @@ namespace Assessment_project___Austin___23370104
         {
             if (sales_list_select.SelectedItem != null)
             {
-                update_wait_list(sales_list_select.SelectedItem.ToString());
+                update_wait_list( "product_list");
+                update_product_veiw(LoadedLists[ "product_list"]);
                 customer_list_select.SelectedItem = sales_list_select.SelectedItem;
             }
             else
@@ -274,7 +279,20 @@ namespace Assessment_project___Austin___23370104
             }
         }
 
-
+        private void customer_list_select_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (sales_list_select.SelectedItem != null)
+            {
+                update_wait_list( "product_list");
+                update_product_veiw(LoadedLists[ "product_list"]);
+                sales_list_select.SelectedItem = customer_list_select.SelectedItem;
+            }
+            else
+            {
+                wait_list.Items.Clear();
+                product_view.Items.Clear();
+            }
+        }
 
 
         //part A
@@ -303,7 +321,7 @@ namespace Assessment_project___Austin___23370104
             }
             if (sales_list_select.SelectedItem != null)
             {
-                selcted_item = sales_list_select.SelectedItem.ToString();
+                selcted_item =  "product_list";
             }
             else
             {
@@ -374,8 +392,8 @@ namespace Assessment_project___Austin___23370104
             }
             if (wait_list.SelectedItem == null)
             {
-                LoadedLists[sales_list_select.SelectedItem.ToString()].Clear();
-                update_wait_list(sales_list_select.SelectedItem.ToString());
+                LoadedLists[ "product_list"].Clear();
+                update_wait_list( "product_list");
             }
             else
             {
@@ -383,16 +401,16 @@ namespace Assessment_project___Austin___23370104
                 {
                     Trace.WriteLine(item);
                     Trace.WriteLine(wait_list.Items.IndexOf(item));
-                    LoadedLists[sales_list_select.SelectedItem.ToString()].RemoveAt(wait_list.Items.IndexOf(item));
+                    LoadedLists[ "product_list"].RemoveAt(wait_list.Items.IndexOf(item));
                 }
             }
-            update_wait_list(sales_list_select.SelectedItem.ToString());
+            update_wait_list( "product_list");
         }
 
         //part 3
         private void save_file_Click(object sender, RoutedEventArgs e)
         {
-            save_file("ProductFile.txt");
+            save_file("ProductFile.txt" , "product_list");
         }
 
         //part 4
@@ -413,7 +431,7 @@ namespace Assessment_project___Austin___23370104
                 string search_item = input_search_product.Text;
                 search_resualts_list.Clear();
 
-                foreach (Dictionary<string, dynamic> product in LoadedLists[customer_list_select.SelectedItem.ToString()])
+                foreach (Dictionary<string, dynamic> product in LoadedLists[ "product_list"])
 
                     if (product["name"].Contains(search_item) || product["id"].Contains(search_item))
                     {
@@ -449,12 +467,13 @@ namespace Assessment_project___Austin___23370104
             if (customer_list_select.Items.Count == 0)
             {
                 load_file("ProductFile.txt");
+                customer_list_select.SelectedItem = "product_list";
             }
             if (customer_list_select.SelectedItem == null)
             {
                 return;
             }
-            update_product_veiw(LoadedLists[customer_list_select.SelectedItem.ToString()]);
+            update_product_veiw(LoadedLists[ "product_list"]);
         }
 
         //part 3
@@ -492,7 +511,7 @@ namespace Assessment_project___Austin___23370104
             }
             else
             {
-                target_list = LoadedLists[customer_list_select.SelectedItem.ToString()]; //pull from the selected product list
+                target_list = LoadedLists[ "product_list"]; //pull from the selected product list
             }
 
             Dictionary<string, dynamic> product = target_list[product_view.SelectedIndex];
@@ -573,11 +592,29 @@ namespace Assessment_project___Austin___23370104
                 return;
             }
             MessageBox.Show("Thank You", "Thank You", MessageBoxButton.OK);
-            
-            foreach ( Dictionary<string,dynamic> product in cart)
+
+
+
+            List<Dictionary<string, dynamic>> updatedList = LoadedLists["product_list"];
+            foreach ( Dictionary<string,dynamic> orderedProduct in cart)
             {
+                string idToFind = orderedProduct["id"];
+                foreach (Dictionary<string, dynamic> savedProduct in LoadedLists["product_list"])
+                {
+                    if (idToFind != savedProduct["id"])
+                    {
+                        continue;
+                    }
+
+                    savedProduct["quantity"] = savedProduct["quantity"] - orderedProduct["quantity"];
+                    break;
+
+                }
 
             }
+
+            LoadedLists["product_list"] = updatedList;
+            save_file("productFile.txt", "product_list");
 
         }
 
@@ -585,5 +622,7 @@ namespace Assessment_project___Austin___23370104
         {
             Select_menu("customer_page");
         }
+
+
     }
 }

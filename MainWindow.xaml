@@ -123,7 +123,7 @@
 
             <ListBox Name="cart_list_box" Grid.Row="3" Grid.Column="5" Grid.RowSpan="5" Grid.ColumnSpan="3" SelectionMode="Single"></ListBox>
 
-            <ListBox Name="customer_list_select" Grid.Row="1" Grid.Column="9" Grid.RowSpan="3" SelectionMode="Single" IsSynchronizedWithCurrentItem="True" SelectionChanged="sales_list_select_SelectionChanged"></ListBox>
+            <ListBox Name="customer_list_select" Grid.Row="1" Grid.Column="9" Grid.RowSpan="3" SelectionMode="Single" IsSynchronizedWithCurrentItem="True" SelectionChanged="customer_list_select_SelectionChanged"></ListBox>
             <Grid Name="Customer_buttons" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="9">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -136,17 +136,19 @@
                     <ColumnDefinition Width="20"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="10"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
+                
                 <Button Name="place_order"          Grid.Row="2" Grid.Column="6" Grid.ColumnSpan="3" Click="place_order_Click" >Place Order and Checkout</Button>
                 <Button Name="view_all_products"    Grid.Row="0" Grid.Column="0" Click="view_all_products_Click" >View All Products</Button>
                 <Button Name="add_to_cart"          Grid.Row="0" Grid.Column="2" Click="add_to_cart_Click" >Add to Cart</Button>
                 <TextBox Name="cart_add_amount"    Grid.Row="0" Grid.Column="4"  Text="1"> </TextBox>
                 <Button Name="remove_from_cart"     Grid.Row="0" Grid.Column="6" Click="remove_from_cart_Click">Remove From Cart</Button>
-                <Button Name="clear_cart"           Grid.Row="0" Grid.Column="8" Click="clear_cart_Click">Clear Cart</Button>
+                <Button Name="btn_clear_cart"           Grid.Row="0" Grid.Column="8" Click="clear_cart_Click">Clear Cart</Button>
             </Grid>
         </Grid>
 
