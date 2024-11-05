@@ -73,7 +73,7 @@ namespace Assessment_project___Austin___23370104
         public MainWindow()
         {
             InitializeComponent();
-
+            Trace.WriteLine("test");
         }
 
         //Swich between pages
@@ -127,7 +127,6 @@ namespace Assessment_project___Austin___23370104
             }
             Total_price.Text = "$" + total_cart_cost.ToString("N2");
         }
-
 
         public void update_list_selecter()
         {
@@ -247,6 +246,45 @@ namespace Assessment_project___Austin___23370104
                 {
                     MessageBox.Show("Error, bad file, please retry with a difrent file", "Error", MessageBoxButton.OK);
                 }
+            }
+        }
+
+        public void save_file()
+        {
+            if (sales_list_select.SelectedItem == null)
+            {
+                return;
+            }
+            // saves all items in the products box to a file called "stored_list.txt"
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "txt files (*.txt)|*.txt";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string save_string = "";
+                int iteration_product = 0;
+                foreach (Dictionary<string, dynamic> product in LoadedLists[sales_list_select.SelectedItem.ToString()])
+                {
+                    int iteration_attributes = 0;
+                    foreach (string key in product.Keys)
+                    {
+                        if (iteration_attributes < 3)
+                        {
+                            save_string = save_string + product[key] + ",";
+                        }
+                        else
+                        {
+                            save_string = save_string + product[key];
+                        }
+                        iteration_attributes++;
+                    }
+
+                    if (iteration_product < (LoadedLists[sales_list_select.SelectedItem.ToString()].Count - 1))
+                        save_string = save_string + Environment.NewLine;
+                    iteration_product++;
+
+                }
+
+                File.WriteAllText(saveFileDialog.FileName, save_string);
             }
         }
 
@@ -379,41 +417,7 @@ namespace Assessment_project___Austin___23370104
         //part 3
         private void save_file_Click(object sender, RoutedEventArgs e)
         {
-            if (sales_list_select.SelectedItem == null)
-            {
-                return;
-            }
-            // saves all items in the products box to a file called "stored_list.txt"
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "txt files (*.txt)|*.txt";
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                string save_string = "";
-                int iteration_product = 0;
-                foreach (Dictionary<string, dynamic> product in LoadedLists[sales_list_select.SelectedItem.ToString()])
-                {
-                    int iteration_attributes = 0;
-                    foreach (string key in product.Keys)
-                    {
-                        if (iteration_attributes < 3)
-                        {
-                            save_string = save_string + product[key] + ",";
-                        }
-                        else
-                        {
-                            save_string = save_string + product[key];
-                        }
-                        iteration_attributes++;
-                    }
-
-                    if (iteration_product < (LoadedLists[sales_list_select.SelectedItem.ToString()].Count - 1))
-                        save_string = save_string + Environment.NewLine;
-                    iteration_product++;
-
-                }
-
-                File.WriteAllText(saveFileDialog.FileName, save_string);
-            }
+            save_file();
         }
 
         //part 4

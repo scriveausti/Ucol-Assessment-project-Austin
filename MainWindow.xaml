@@ -80,7 +80,7 @@
 
             <Button Name="add_wait_list" Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="9" Click="add_wait_list_Click">Add to Waiting List</Button>
             <Button Name="clear_list" Grid.Column="5" Grid.Row="9" Click="clear_list_Click">clear List</Button>
-            <Button Name="save_file" Grid.Column="7" Grid.Row="9" Click="save_file_Click">Save to File</Button>
+            <Button Name="btn_save_file" Grid.Column="7" Grid.Row="9" Click="save_file_Click">Save to File</Button>
             <Button Name="btn_load_file" Grid.Column="9" Grid.Row="9" Click="load_file_Click">Load File</Button>
 
         </Grid>
