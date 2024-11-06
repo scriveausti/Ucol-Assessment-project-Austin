@@ -31,7 +31,7 @@
         </Menu>
 
         <!--Sales Page-->
-        <Grid Name="sales_page" Background="#FF519C93" Grid.Row="1" Visibility="Hidden">
+        <Grid Name="sales_page" Background="#FF519C93" Grid.Row="1" Visibility="Visible">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="*"/>
@@ -123,7 +123,7 @@
 
             <ListBox Name="cart_list_box" Grid.Row="3" Grid.Column="5" Grid.RowSpan="5" Grid.ColumnSpan="3" SelectionMode="Single"></ListBox>
 
-            <ListBox Name="customer_list_select" Grid.Row="1" Grid.Column="9" Grid.RowSpan="3" SelectionMode="Single" IsSynchronizedWithCurrentItem="True" SelectionChanged="customer_list_select_SelectionChanged"></ListBox>
+            <ListBox Name="customer_list_select" Grid.Row="1" Grid.Column="9" Grid.RowSpan="3" SelectionMode="Single" IsSynchronizedWithCurrentItem="True" ></ListBox>
             <Grid Name="Customer_buttons" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="9">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -153,7 +153,7 @@
         </Grid>
 
         <!--Checkout Page-->
-        <Grid Name="checkout_page" Grid.Row="1" Background="OrangeRed" Visibility="Visible">
+        <Grid Name="checkout_page" Grid.Row="1" Background="OrangeRed" Visibility="Hidden">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="*"/>
